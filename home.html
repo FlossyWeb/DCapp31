@@ -681,6 +681,16 @@
 		{
 			window.plugins.childBrowser.showWebPage('http://taxibleuservices.com/client/docs/CGV.pdf', { showLocationBar: true });
 		}
+		
+	    // Attendre que PhoneGap soit prêt	    //
+	    document.addEventListener("deviceready", onDeviceReady, false);
+	
+	    // PhoneGap est prêt
+	    function onDeviceReady() {
+	        //navigator.geolocation.getCurrentPosition(onSuccess, onError);
+	        getLocation();
+	    }
+		
 		/*
 		// Swiping between pages function
 		$('div.ui-page').live("swipeleft", function(){

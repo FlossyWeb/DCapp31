@@ -131,6 +131,30 @@
 					}
 					*/
 				});
+				$("#forget").validate({
+					rules: {
+					 login: {
+					   required: true,
+					   phone: true
+					 },
+					 mail: {
+					   required: true,
+					   email: true
+					 }
+					},
+					messages: {
+					 mail: {
+					   required: "Nous avons besoin de votre email afin de vous contacter",
+					   email: "Votre email doit &ecirc;tre au format nom@domaine.com"
+					 }
+					}
+					/* Put errors below fields
+					,
+					errorPlacement: function(error, element) {
+						error.appendTo( element.parent().next('em') );
+					}
+					*/
+				});
 				/*
 				$('input[name="tel"]').rules("add", { required: true, regex: "^(01|02|03|04|05|06|07|08|09)[0-9]{8}$", messages: { regex: "le N&deg; de t&eacute;l&eacute;phone doit corresondre &agrave; 10 chiffres sans espace", required: "Ce champs est obligatoire" } })
 				$('input[name="siret"]').rules("add", { required: true, regex: "^[0-9]{14}$", messages: { regex: "Le N&deg; SIRET doit corresondre &agrave; 14 chiffres sans espace", required: "Ce champs est obligatoire" } })
@@ -194,6 +218,25 @@
 							document.location.href='home.html';
 							//$.mobile.changePage( "test.html", { transition: "slide"} );
 						}
+					}, "json");
+				});
+
+				$("#forget").submit(function(event) {
+					// stop form from submitting normally
+					event.preventDefault();
+					// Subs some data
+					$.post("https://ssl14.ovh.net/~taxibleu/client/forget_app.php", $("#forget").serialize(), function(data) {
+						//alert($("#change").serialize());
+						// GET SHIT BACK !!
+						var display = '';
+						if (data.sent)
+						{
+							display = '<p><b>Voici les informations d&rsquo;identification qui vous permettront d&rsquo;acc&egrave;der &agrave; votre compte :<br><span style="color:#09F;">Identifiant = ' + data.tel + '<br>Mot de passe = ' + data.pwd + '</span><br>Vous les recevrez dans quelques instants &agrave; cet email : <span style="color:#09F;">' + data.email + '</span>, merci.<br></b></p>';
+						}
+						else {
+							display = '<p style="color:red;"><b>Nous ne pouvons divulguer vos informations personnelles car l&rsquo;identifiant ou l&rsquo;adresse mail fourni ne figure pas dans notre base de donn&eacute;e.</b></p>' + data.tel + ' - ' + data.pwd + ' - ' + data.email + ' - ' + data.sent;
+						}
+						$("#returns").empty().append(display);
 					}, "json");
 				});
 				
@@ -265,7 +308,7 @@
                                  Inscrivez-Vous 
                             </h1>
                             <fieldset><legend></legend>
-                            <form method="POST" action="/" target="_parent" data-ajax="false" data-transition="slidefade" id="register">
+                            <form method="POST" action="/" data-transition="slidefade" id="register">
                                 <select name="civil">
                                     <option selected value="">Civilit&eacute;</option>
                                     <option>Mme</option>
@@ -275,8 +318,8 @@
                                 <input type="text" name="nom" placeholder="Nom" maxlength="60" size="20" class="required"><em></em>
                                 <input type="text" name="prenom" placeholder="Pr&eacute;nom" maxlength="60" size="20" class="required"><em></em>	
                                 <input type="text" name="taxi" placeholder="Num&eacute;ro de taxi" maxlength="60" size="20" class="required">
-                                <input type="text" name="tel" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="60" size="20" class="required"><em></em>
-                                <input type="text" name="siret" placeholder="N&deg; SIRET (14 chiffres sans espace SVP)" maxlength="60" size="20" class="required"><em></em>
+                                <input type="text" name="tel" placeholder="T&eacute;l&eacute;phone (Sans espace SVP)" maxlength="10" size="20" class="required"><em></em>
+                                <input type="text" name="siret" placeholder="N&deg; SIRET (14 chiffres sans espace SVP)" maxlength="14" size="20" class="required"><em></em>
                                 <input type="text" name="station" placeholder="Commune de stationnement" maxlength="60" size="20" class="required"><em></em>
                                 <select name="type" id="type">
                                     <option selected value="">Type de vehicule</option>
@@ -369,7 +412,7 @@
                                 <input type="hidden" name="dep" value="31"/>
                                 <input type="submit" name="submit" id="subReg" value="Envoyer">
                                 <p><b>
-                                    Vous recevrez, dans quelques minutes, les identifiant et mot de passe qui vous permettront d'acc&egrave;der &agrave; votre compte.
+                                    Vous recevrez par email, dans quelques instants, les identifiant et mot de passe qui vous permettront d'acc&egrave;der &agrave; votre compte.
                                 </b></p>
                             </form>
                             </fieldset>    
@@ -380,13 +423,29 @@
                                  Identifiez-Vous 
                             </h1>
                             <fieldset><legend></legend>
-                            <form  action="/" method="post" name="id" id="login" data-ajax="false" data-transition="slidefade">
-                                <input type="text" name="log" size="20" maxlength="12" placeholder="Identifiant"/>
+                            <form  action="/" method="post" name="id" id="login" data-transition="slidefade">
+                                <input type="text" name="log" size="20" maxlength="10" placeholder="Identifiant"/>
                                 <input type="password" name="pass" size="20" maxlength="16" placeholder="Mot de Passe"/>
                                 <input type="hidden" name="dep" value="31"/>
                                 <input type="submit" id="subLog" value=" Connection "/>
                             </form>
                             </fieldset>
+                        </div>
+                        <div data-role="collapsible">
+                            <h1>
+                                 Mot de passe oubli&eacute;
+                            </h1>
+                            <fieldset><legend></legend>
+                            <form  action="/" method="post" name="forget" id="forget" data-transition="slidefade">
+                                <input type="text" name="login" size="20" maxlength="10" placeholder="Identifiant"/>
+                                <input type="text" name="mail" size="32" maxlength="60" placeholder="L&rsquo;email de votre compte"/>
+                                 <input type="hidden" name="dep" value="31"/>
+                                <input type="submit" id="subFor" value=" Envoyer "/>
+                           </form>
+                            </fieldset>
+                            <p><b>
+                                Vous recevrez, dans quelques instants, vos identifiant et mot de passe par email.
+                            </b></p>
                         </div>
                     </div>    
                 </div>
