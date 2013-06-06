@@ -308,7 +308,7 @@
                                  Inscrivez-Vous 
                             </h1>
                             <fieldset><legend></legend>
-                            <form method="POST" action="/" data-transition="slidefade" id="register">
+                            <form method="POST" action="/" data-transition="slidefade" id="register" data-ajax="false">
                                 <select name="civil">
                                     <option selected value="">Civilit&eacute;</option>
                                     <option>Mme</option>
@@ -423,7 +423,7 @@
                                  Identifiez-Vous 
                             </h1>
                             <fieldset><legend></legend>
-                            <form  action="/" method="post" name="id" id="login" data-transition="slidefade">
+                            <form  action="/" method="post" name="id" id="login" data-ajax="false" data-transition="slidefade">
                                 <input type="text" name="log" size="20" maxlength="10" placeholder="Identifiant"/>
                                 <input type="password" name="pass" size="20" maxlength="16" placeholder="Mot de Passe"/>
                                 <input type="hidden" name="dep" value="31"/>
@@ -436,7 +436,7 @@
                                  Mot de passe oubli&eacute;
                             </h1>
                             <fieldset><legend></legend>
-                            <form  action="/" method="post" name="forget" id="forget" data-transition="slidefade">
+                            <form  action="/" method="post" name="forget" id="forget" data-ajax="false" data-transition="slidefade">
                                 <input type="text" name="login" size="20" maxlength="10" placeholder="Identifiant"/>
                                 <input type="text" name="mail" size="32" maxlength="60" placeholder="L&rsquo;email de votre compte"/>
                                  <input type="hidden" name="dep" value="31"/>
