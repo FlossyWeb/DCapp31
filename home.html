@@ -254,6 +254,7 @@
 		var cell = $.sessionStorage.setItem('cell', '');
 		var cmd = $.sessionStorage.setItem('cmd', 0);
 		var query_string = $.sessionStorage.setItem('query_string', '');
+		var delay = 10;
 
         // Lecteur audio
         var my_media = null;
@@ -353,34 +354,37 @@
 		});
 		
         $('#delayPop').live( 'pagebeforeshow',function(event) {
-			$("#hideCall").hide("fast");
+			//$("#hideCall").hide("fast");
 			$("#delayConf").hide("fast");
 			//$('select#delay').val('d&eacute;lai');
 			//$('select#delay').selectmenu('refresh', true);
 		});
         
 		$( '#planning' ).live( 'pagebeforeshow',function(event){
-			$.post("https://ssl14.ovh.net/~taxibleu/client/in_app_calls.php", { planning: 'true', taxi: taxi, pass: pass, dep: '31' }, function(data){
+			$.post("https://ssl14.ovh.net/~taxibleu/client/in_app_calls.php", { planning: 'true', tel: tel, pass: pass, dep: '31' }, function(data){
+				$.mobile.loading( "show" );
 				$("#plan_cont").empty().append(data);
 				$("#plan_cont").trigger('create');
 				//alert(data);
-			});
+			}).done(function() { $.mobile.loading( "hide" ); });
 		});
 
 		$( '#history' ).live( 'pagebeforeshow',function(event){
-			$.post("https://ssl14.ovh.net/~taxibleu/client/in_app_calls.php", { history: 'true', taxi: taxi, pass: pass, dep: '31' }, function(data){
+			$.post("https://ssl14.ovh.net/~taxibleu/client/in_app_calls.php", { history: 'true', tel: tel, pass: pass, dep: '31' }, function(data){
+				$.mobile.loading( "show" );
 				$("#hist_cont").empty().append(data);
 				$("#hist_cont").trigger('create');
 				//alert(data);
-			});
+			}).done(function() { $.mobile.loading( "hide" ); });
 		});
 
 		$( '#infos' ).live( 'pagebeforeshow',function(event){
 			$.post("https://ssl14.ovh.net/~taxibleu/client/in_app_calls.php", { infos: 'true', pass: pass, dep: '31' }, function(data){
+				$.mobile.loading( "show" );
 				$("#infos_cont").empty().append(data);
 				$("#infos_cont").trigger('create');
 				//alert(data);
-			});
+			}).done(function() { $.mobile.loading( "hide" ); });
 		});
 
         $('#manage').live('pageinit', function() {
@@ -668,7 +672,12 @@
 		function directCall()
 		{
 			$.mobile.loading( "show" );
-			var query_string = $.sessionStorage.getItem('query_string');
+			// Getting query_string using sessionStorage
+			var dataDiary = $.sessionStorage.getItem('query_string');
+			// Modifying the link 2 diary
+			//var link2diary = document.getElementById('link2diary');
+			query_string = dataDiary + '&delay=' + delay;
+			$.sessionStorage.setItem('query_string', query_string);
 			$.post("https://ssl14.ovh.net/~taxibleu/server/diary_app_dcvp.php?dep=31", query_string, function(data){ 
 				switch (data.location) {
 					 case '#directions_map':
@@ -941,13 +950,7 @@
 				
 				// Getting delay list value
 				var delay = document.getElementById('delay').value;
-				// Getting query_string using sessionStorage
-				var dataDiary = $.sessionStorage.getItem('query_string');
-				// Modifying the link 2 diary
-				//var link2diary = document.getElementById('link2diary');
-				dataDiary = dataDiary + '&delay=' + delay;
-				$.sessionStorage.setItem('query_string', dataDiary);
-				$("#hideCall").show("fast");
+				//$("#hideCall").show("fast");
 				$("#delayConf").html(str);
 				$("#delayConf").show("fast");
 				//$("#link2diary").trigger('click');
@@ -1190,7 +1193,7 @@
                     <!-- 
                     <a href="#" id="link2diary" data-role="button" data-iconpos="left" data-icon="check" data-theme="b" style="display:none;">Envoyer</a>
                     -->
-                    <div id="hideCall" style="display:none;">
+                    <div id="hideCall">
                         <input type="button" id="directCall" data-role="button" value="Envoyer" onClick="directCall()" data-iconpos="left" data-icon="check" data-theme="b"/>
                     </div>
                     <div id="delayConf"></div>
