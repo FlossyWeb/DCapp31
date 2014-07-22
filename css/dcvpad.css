@@ -1,10 +1,10 @@
 body {
 	margin: 0px;
 	padding: 0px;
-	background: #000 url(../visuels/bg.png) top left repeat-x;
+	background: #0099CC url(../visuels/bg.png) top left repeat-x;
 }
 .ui-overlay-b, .ui-page-theme-b, .ui-page-theme-b .ui-panel-wrapper, .ui-page-theme-b .ui-body-inherit {
-	background: #000 url(../visuels/bg.png) top left repeat-x;
+	background: #0099CC url(../visuels/bg.png) top left repeat-x;
 }
 #search-box, #book-box {
 	display: none;
